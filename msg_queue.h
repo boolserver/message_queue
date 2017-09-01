@@ -11,9 +11,9 @@
 #define UUID_SIZE_FOR_STR 32*sizeof(char)
 #define QUEUE_MOUNT "/tmp_queue2"
 
-typedef struct msgForQueue{
+/*typedef struct msgForQueue{
     char uuid_str[UUID_SIZE_FOR_STR];
-} MsgForQueue;
+} MsgForQueue;*/
 
 unsigned char *buffer_genration(const char *filename);
 mqd_t init_message_queue();                                 // To be called once for a queue

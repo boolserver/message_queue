@@ -14,7 +14,7 @@ mqd_t init_message_queue(){
     struct mq_attr m_attribute;
     m_attribute.mq_flags = 0;
     m_attribute.mq_maxmsg = 100;
-    m_attribute.mq_msgsize = UUID_SIZE_FOR_STR + 1;
+    m_attribute.mq_msgsize = UUID_SIZE_FOR_STR;
     m_attribute.mq_curmsgs = 0;
     
     mqd_t m_queue = mq_open(QUEUE_MOUNT, O_RDWR | O_CREAT | O_NONBLOCK, 0666, &m_attribute);
@@ -36,20 +36,21 @@ void uuid_to_str(uuid_t uuid, char* str_ptr){
 
 void send_m_buffer_to_queue(char *m_buffer){
     mqd_t m_queue_2 = mq_open(QUEUE_MOUNT, O_WRONLY | O_NONBLOCK);
-    //char* temp_buf = m_buffer->uuid_str;
     printf("\tTemp buf -> %s and size -> %d\n", m_buffer, sizeof(m_buffer));
+    
     int status = mq_send(m_queue_2, m_buffer, UUID_SIZE_FOR_STR, 1);
+    
     if(status == -1){printf("Failed to send data to m queue\n");}
 }
 
 char* receive_m_buffer_from_queue(){
-    //printf("Size of r buffer -> %s\n", sizeof(r_buffer));
     mqd_t m_queue_3 = mq_open(QUEUE_MOUNT, O_RDONLY | O_NONBLOCK);
-    char* r_buffer = malloc(UUID_SIZE_FOR_STR + 1);
-    int status = mq_receive(m_queue_3, r_buffer, UUID_SIZE_FOR_STR+1, NULL);
+    char* r_buffer = malloc(UUID_SIZE_FOR_STR);
+    int status = mq_receive(m_queue_3, r_buffer, UUID_SIZE_FOR_STR, NULL);
+    
     if(status == -1){printf("Failed to RECEIVE data from m queue\n");}
     printf("Recived -> %s\n", r_buffer);
-    //r_buffer->uuid_str = &temp_buf;
+    
     return r_buffer;
 }
 
@@ -83,7 +84,7 @@ int main(int argc, char **argv){
     uuid_t uuid;
     uuid_generate_random(uuid);
     
-    unsigned char* temp_msg = malloc(UUID_SIZE_FOR_STR);
+    char* temp_msg = malloc(UUID_SIZE_FOR_STR);
     //char* r_msg = malloc(UUID_SIZE_FOR_STR);
 
     uuid_to_str(uuid, temp_msg);
@@ -93,12 +94,23 @@ int main(int argc, char **argv){
     send_m_buffer_to_queue(temp_msg);
     printf("Msg sent\nReciving msg\n");
 
+    uuid_generate_random(uuid);
+    //free(temp_msg);
+    uuid_to_str(uuid, temp_msg);
+    printf("UUID in temp_msg 2 -> %s\nSending Msg\n", temp_msg);
+
+    send_m_buffer_to_queue(temp_msg);
+    printf("Second msg sent\n");
+
     mq_getattr(m_queue, &m_attribute);
 
     printf("Flags -> %d, mq_maxmsg -> %d, mq_maxsize -> %d, mq_curmsgs -> %d\n", m_attribute.mq_flags, m_attribute.mq_maxmsg, m_attribute.mq_msgsize, m_attribute.mq_curmsgs);
     char* r_msg = receive_m_buffer_from_queue(r_msg);
     printf("Size of r_msg -> %d\n", sizeof(r_msg)); 
     printf("UUID recived buffer -> %s\n", r_msg);
+
+    free(temp_msg);
+    free(r_msg);
 
     return 0;
 }
