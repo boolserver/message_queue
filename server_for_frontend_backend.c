@@ -1,4 +1,4 @@
-#include "server_for_frontend.h"
+#include "server_for_frontend_backend.h"
 
 int init_socket(){
     int listenfd = socket(AF_INET, SOCK_STREAM, 0); 
@@ -48,8 +48,12 @@ int main(){
             printf("Recived this UUID-> %s\n", r_uuid);
         }
         else if(frontend_or_msgqueue == 'm'){
-          char* r_uuid_str = receive_m_buffer_from_queue();
-          write(connfd, r_uuid_str, UUID_SIZE_FOR_STR);
+            char* r_uuid_str = receive_m_buffer_from_queue();
+            if(strlen(r_uuid_str) != 32){
+                char *empty = &EMPTY_STR;
+                write(connfd, empty, UUID_SIZE_FOR_STR);
+            } 
+            write(connfd, r_uuid_str, UUID_SIZE_FOR_STR);
         }
         close(connfd);
     }
