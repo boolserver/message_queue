@@ -45,7 +45,7 @@ void send_m_buffer_to_queue(char *m_buffer){
 
 char* receive_m_buffer_from_queue(){
     mqd_t m_queue_3 = mq_open(QUEUE_MOUNT, O_RDONLY | O_NONBLOCK);
-    char* r_buffer = malloc(UUID_SIZE_FOR_STR);
+    char* r_buffer = malloc(UUID_SIZE_FOR_STR + 1);
     int status = mq_receive(m_queue_3, r_buffer, UUID_SIZE_FOR_STR, NULL);
     
     if(status == -1){printf("Failed to RECEIVE data from m queue\n");}
@@ -53,7 +53,7 @@ char* receive_m_buffer_from_queue(){
     
     return r_buffer;
 }
-
+/*
 int main(int argc, char **argv){
     printf("Starting code\n");
     int status = 0;
@@ -105,7 +105,8 @@ int main(int argc, char **argv){
     mq_getattr(m_queue, &m_attribute);
 
     printf("Flags -> %d, mq_maxmsg -> %d, mq_maxsize -> %d, mq_curmsgs -> %d\n", m_attribute.mq_flags, m_attribute.mq_maxmsg, m_attribute.mq_msgsize, m_attribute.mq_curmsgs);
-    char* r_msg = receive_m_buffer_from_queue(r_msg);
+    printf("\n\nSTARTING THE RECIVE\n\n");
+    char* r_msg = receive_m_buffer_from_queue();
     printf("Size of r_msg -> %d\n", sizeof(r_msg)); 
     printf("UUID recived buffer -> %s\n", r_msg);
 
@@ -113,4 +114,4 @@ int main(int argc, char **argv){
     free(r_msg);
 
     return 0;
-}
+}*/
