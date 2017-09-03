@@ -50,7 +50,7 @@ int main(){
         else if(frontend_or_msgqueue == 'm'){
             char* r_uuid_str = receive_m_buffer_from_queue();
             if(strlen(r_uuid_str) != 32){
-                char *empty = &EMPTY_STR;
+                char *empty = EMPTY_STR;
                 write(connfd, empty, UUID_SIZE_FOR_STR);
             } 
             write(connfd, r_uuid_str, UUID_SIZE_FOR_STR);
