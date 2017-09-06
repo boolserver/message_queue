@@ -48,7 +48,7 @@ char* receive_m_buffer_from_queue(){
     char* r_buffer = malloc(UUID_SIZE_FOR_STR + 1);
     int status = mq_receive(m_queue_3, r_buffer, UUID_SIZE_FOR_STR+1, NULL);
     
-    if(status == -1){printf("Failed to RECEIVE data from m queue\n");exit(100);}
+    if(status == -1){printf("Failed to RECEIVE data from m queue\n");}
     printf("Recived -> %s\n", r_buffer);
     
     return r_buffer;
