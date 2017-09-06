@@ -14,7 +14,7 @@ mqd_t init_message_queue(){
     struct mq_attr m_attribute;
     m_attribute.mq_flags = 0;
     m_attribute.mq_maxmsg = 1000;
-    m_attribute.mq_msgsize = UUID_SIZE_FOR_STR + 1;
+    m_attribute.mq_msgsize = UUID_SIZE_FOR_STR;
     m_attribute.mq_curmsgs = 0;
     
     mqd_t m_queue = mq_open(QUEUE_MOUNT, O_RDWR | O_CREAT | O_NONBLOCK, 0666, &m_attribute);
