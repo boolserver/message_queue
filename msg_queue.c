@@ -13,8 +13,8 @@ unsigned char *buffer_genration(const char *filename){
 mqd_t init_message_queue(){
     struct mq_attr m_attribute;
     m_attribute.mq_flags = 0;
-    m_attribute.mq_maxmsg = 100;
-    m_attribute.mq_msgsize = UUID_SIZE_FOR_STR;
+    m_attribute.mq_maxmsg = 1000;
+    m_attribute.mq_msgsize = UUID_SIZE_FOR_STR + 1;
     m_attribute.mq_curmsgs = 0;
     
     mqd_t m_queue = mq_open(QUEUE_MOUNT, O_RDWR | O_CREAT | O_NONBLOCK, 0666, &m_attribute);
@@ -36,19 +36,19 @@ void uuid_to_str(uuid_t uuid, char* str_ptr){
 
 void send_m_buffer_to_queue(char *m_buffer){
     mqd_t m_queue_2 = mq_open(QUEUE_MOUNT, O_WRONLY | O_NONBLOCK);
-    printf("\tTemp buf -> %s and size -> %d\n", m_buffer, sizeof(m_buffer));
+    printf("\tTemp buf -> %s and size -> %d and strlen is -> %d\n", m_buffer, sizeof(m_buffer), strlen(m_buffer));
     
-    int status = mq_send(m_queue_2, m_buffer, UUID_SIZE_FOR_STR, 1);
+    int status = mq_send(m_queue_2, m_buffer, strlen(m_buffer), 1);
     
-    if(status == -1){printf("Failed to send data to m queue\n");}
+    if(status == -1){printf("Failed to send data to m queue\n");exit(100);}
 }
 
 char* receive_m_buffer_from_queue(){
     mqd_t m_queue_3 = mq_open(QUEUE_MOUNT, O_RDONLY | O_NONBLOCK);
     char* r_buffer = malloc(UUID_SIZE_FOR_STR + 1);
-    int status = mq_receive(m_queue_3, r_buffer, UUID_SIZE_FOR_STR, NULL);
+    int status = mq_receive(m_queue_3, r_buffer, UUID_SIZE_FOR_STR+1, NULL);
     
-    if(status == -1){printf("Failed to RECEIVE data from m queue\n");}
+    if(status == -1){printf("Failed to RECEIVE data from m queue\n");exit(100);}
     printf("Recived -> %s\n", r_buffer);
     
     return r_buffer;
