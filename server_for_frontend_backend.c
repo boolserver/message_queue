@@ -33,6 +33,10 @@ char* get_uuid_as_server(int connfd){
 int main(){
     char* r_uuid;
     printf("Starting the Client\n"); 
+    printf("Initializing msg queue..\n");
+    init_message_queue();
+    printf("Msg queue initialized\n\n");
+    
     int listenfd = init_socket();
     char frontend_or_msgqueue;
     
