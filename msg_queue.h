@@ -8,8 +8,8 @@
 #include <uuid/uuid.h>
 
 #define BUF_SIZE 256
-#define UUID_SIZE_FOR_STR 32*sizeof(char)
-#define QUEUE_MOUNT "/tmp_queue"
+#define UUID_SIZE_FOR_STR 32
+#define QUEUE_MOUNT "/tmp_queue_test"
 
 /*typedef struct msgForQueue{
     char uuid_str[UUID_SIZE_FOR_STR];
