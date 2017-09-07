@@ -13,7 +13,7 @@ unsigned char *buffer_genration(const char *filename){
 mqd_t init_message_queue(){
     struct mq_attr m_attribute;
     m_attribute.mq_flags = 0;
-    m_attribute.mq_maxmsg = 1000;
+    m_attribute.mq_maxmsg = 10000;
     m_attribute.mq_msgsize = UUID_SIZE_FOR_STR;
     m_attribute.mq_curmsgs = 0;
     
