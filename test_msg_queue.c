@@ -55,7 +55,7 @@ int main(int argc, char **argv){
     char* r_msg = receive_m_buffer_from_queue();
     printf("Size of r_msg -> %d\n", sizeof(r_msg)); 
     printf("UUID recived buffer -> %s\n", r_msg);
-
+    status = mq_unlink(QUEUE_MOUNT);
     free(temp_msg);
     free(r_msg);
 
